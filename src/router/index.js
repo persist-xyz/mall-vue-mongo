@@ -20,7 +20,7 @@ const router = new Router({
     {
       path: '/shoppingCart',
       name: 'shoppingCart',
-      components: import('@/page/shoppingCart'),
+      component: resolve => require(['@/page/shoppingCart'], resolve),
       meta: {
         title: '购物车列表'
       }
@@ -28,7 +28,7 @@ const router = new Router({
     {
       path: '/addressList',
       name: 'addressList',
-      components: import('@/page/addressList'),
+      component: resolve => require(['@/page/addressList'], resolve),
       meta: {
         title: '收货地址'
       }

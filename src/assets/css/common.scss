@@ -1,0 +1,110 @@
+html {
+  height: 100%;
+  font-size: 14px;
+}
+
+body {
+  height: 100%;
+  color: #333;
+  font-size: 14px;
+  background: #f0f1f4;
+  font-family: microsoft yahei, Helvetica, Calibri, Tahoma, Arial, sans-serif;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.clearfix:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.hidePlaceholder::-webkit-input-placeholder, .hidePlaceholder::-webkit-input-placeholder {
+  color: #fff;
+  opacity: 0.4;
+  transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+}
+
+#app {
+  height: 100%;
+  min-width: 1200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.main-container {
+  position: relative;
+  min-height: calc(100vh - 84px);
+}
+
+.main-content {
+  position: relative;
+  margin: 10px;
+  padding: 10px;
+  background-color: #fff;
+  &.min-height {
+    min-height: calc(100vh - 134px);
+  }
+}
+
+.font12{
+  font-size:12px;
+}
+.font14{
+  font-size:14px;
+}
+.font16{
+  font-size:16px;
+}
+.font18{
+  font-size:18px;
+}
+.font20{
+  font-size:20px;
+}
+.font22{
+  font-size:22px;
+}
+
+
+.black{
+  color: #000;
+}
+.black2{
+  color: #333;
+}
+.gray{
+  color: #666;
+}
+.gray2{
+  color: #999;
+}
+.white{
+  color: #fff;
+}
+.marginTop10{
+  margin-top:10px;
+}
+.marginBottom10{
+  margin-bottom:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
