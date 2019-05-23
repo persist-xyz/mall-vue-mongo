@@ -1,4 +1,7 @@
 <template>
+  <div>
+    shoppingCart.vue
+  </div>
 </template>
 
 <script>

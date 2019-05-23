@@ -1,4 +1,7 @@
 <template>
+  <div>
+    addressList.vue
+  </div>
 </template>
 
 <script>
