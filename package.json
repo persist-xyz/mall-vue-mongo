@@ -1,5 +1,5 @@
 {
-  "name": "mall-vue-mongo",
+  "name": "test",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "zhuxiaoyun <zhuxiaoyun@mogoroom.com>",
@@ -12,11 +12,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "express": "^4.17.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
     "vue": "^2.5.2",
+    "vue-lazyload": "^1.2.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
@@ -62,7 +61,7 @@
     "vue-style-loader": "^3.1.2",
     "vue-template-compiler": "^2.5.2",
     "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-merge": "^4.1.0"
   },

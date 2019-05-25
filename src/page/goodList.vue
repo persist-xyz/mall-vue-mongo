@@ -64,12 +64,17 @@ export default {
   },
   mounted () {
     this.getGoodList()
-    document.addEventListener('scroll', this.scrollHandler, true)
+    // document.addEventListener('scroll', this.scrollHandler, true)
   },
   methods: {
     scrollHandler () {
-      let scrollTop = this.$refs.mainContent.scrollTop
-      console.log(`${scrollTop}`)
+    //      let scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+    //      let scrollHeight = document.body.scrollHeight || document.documentElement.scrollHeight
+    //      let offsetHeight = this.$refs.mainContent.offsetHeight
+    //      let clientHeight = document.body.clientHeight || document.documentElement.clientHeight
+    //      let innerHeight = window.innerHeight
+    //      console.log(`${scrollTop}`, `${scrollHeight}`, `${offsetHeight}`, `${clientHeight}`)
+    //      console.log(`${scrollTop}` + `${clientHeight}`, `${scrollHeight}`, `${offsetHeight}`, `${innerHeight}`)
     },
     getGoodList () {
       this.$ajax.get('/goods', this.params).then(res => {

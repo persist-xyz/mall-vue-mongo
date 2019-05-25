@@ -1,4 +1,4 @@
-# mall-vue-mongo
+# test
 
 > A Vue.js project
 
