@@ -8,6 +8,9 @@ import axios from '@/utils/axios'
 import '@/assets/css/reset.scss'
 import '@/assets/css/common.scss'
 
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
+
 Vue.use(vueLazyload, {
   loading: '/static/loading-bars.svg'
 })

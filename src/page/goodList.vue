@@ -5,18 +5,22 @@
         <span>价格筛选：</span>
         <ul>
           <li v-for="(item, index) in filterList"
-              :key="index" @click="filterOption(item)">{{item.minPrice}} - {{item.maxPrice}}</li>
+              :class="{'activePrice': activePriceIndex === index}"
+              :key="index" @click="filterOption(item, index)">{{item.minPrice}} - {{item.maxPrice}}</li>
         </ul>
       </div>
       <div class="filter-list">
         <span>价格：</span>
-        <ul class="sort">
-          <li @click="params.sort = 1, getGoodList()">升序</li>
-          <li @click="params.sort = -1, getGoodList()">降序</li>
+        <ul>
+          <li :class="{'activePrice': params.sort === 1}" @click="resetParams(), params.sort = 1, getGoodList()">升序</li>
+          <li :class="{'activePrice': params.sort === -1}" @click="resetParams(), params.sort = -1, getGoodList()">降序</li>
         </ul>
       </div>
     </div>
-    <div class="content-list">
+    <div class="content-list"
+         v-infinite-scroll="getGoodList"
+         :infinite-scroll-disabled="busy"
+         infinite-scroll-distance="10">
       <good-card v-for="(item, index) in goodList" :key="index" :listCard="item"></good-card>
     </div>
   </div>
@@ -49,21 +53,24 @@ export default {
         },
         {
           minPrice: 5000,
-          maxPrice: 1000000
+          maxPrice: 10000
         }
       ],
       goodList: [],
+      activePriceIndex: 0,
+      activeSortIndex: 0,
+      busy: false,
       params: {
         sort: 1,
         minPrice: 0,
         maxPrice: 10000000,
         currentPage: 1,
-        pageNum: 20
+        pageNum: 8
       }
     }
   },
   mounted () {
-    this.getGoodList()
+//    this.getGoodList()
     // document.addEventListener('scroll', this.scrollHandler, true)
   },
   methods: {
@@ -77,25 +84,30 @@ export default {
     //      console.log(`${scrollTop}` + `${clientHeight}`, `${scrollHeight}`, `${offsetHeight}`, `${innerHeight}`)
     },
     getGoodList () {
+      this.busy = true
       this.$ajax.get('/goods', this.params).then(res => {
-        this.goodList = res.result.list
+        this.goodList = this.goodList.concat(res.result.list)
+        this.params.currentPage++
+        this.busy = false
       })
     },
     // 价格过滤
-    filterOption (item) {
+    filterOption (item, index) {
+      this.resetParams()
+      this.activePriceIndex = index
       this.params.minPrice = (item && item.minPrice) || 0
       this.params.maxPrice = (item && item.maxPrice) || 10000000
       this.getGoodList()
     },
-    // 升序
-    ascending () {
-      this.params.sort = 1
-      this.getGoodList()
-    },
-    // 降序
-    descending () {
-      this.params.sort = -1
-      this.getGoodList()
+    resetParams () {
+      this.params = {
+        sort: 1,
+        minPrice: 0,
+        maxPrice: 10000000,
+        currentPage: 1,
+        pageNum: 8
+      }
+      this.goodList = []
     }
   }
 }
@@ -119,21 +131,23 @@ export default {
         display: flex;
         color: #666;
         li{
-          line-height: 37px;
+          line-height: 35px;
           padding:0 20px;
           cursor: pointer;
           &:hover{
             color: #f56000;
             background: #ebeeef;
           }
-        }
-      }
-      .sort{
-        li{
-
+          &.activePrice{
+            color: #fff;
+            background: #f56000;
+            margin: 0 10px;
+            border-radius: 20px;
+          }
         }
       }
     }
+
     .content-list{
     }
   }
