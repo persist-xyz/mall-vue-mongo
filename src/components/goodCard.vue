@@ -1,11 +1,9 @@
 <template>
   <div class="goods-card">
-    <div>
-      <img :src="listCard.img" alt="">
-    </div>
+    <div class="img-div" :style="{'background-image': `url(/static/image/${listCard.productImage})`}"></div>
     <div class="note">
-      <p class="black2">{{listCard.title}}</p>
-      <span class="gray2 marginTop10">¥ {{listCard.price}}</span>
+      <p class="black2">{{listCard.productName}}</p>
+      <span class="gray2 marginTop10">¥ {{listCard.salePrice}}</span>
     </div>
   </div>
 </template>
@@ -32,11 +30,12 @@ export default {
     width:220px;
     cursor: pointer;
     display: inline-block;
-    margin:0 10px 10px 10px;
+    margin:0 10px 20px 10px;
     background: #fff;
-    img{
+    .img-div{
       width: 100%;
       height: 150px;
+      background-size: contain;
     }
     .note{
       padding:10px 5px;

@@ -3,10 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from '@/utils/axios'
 import '@/assets/css/reset.scss'
 import '@/assets/css/common.scss'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$ajax = axios
 
 /* eslint-disable no-new */
 new Vue({
