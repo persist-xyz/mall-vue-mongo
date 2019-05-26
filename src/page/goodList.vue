@@ -28,7 +28,10 @@
          class="content-list"
          infinite-scroll-distance="10">
       <div v-if="isEmpty" class="text-center font14 gray2 marginTop10">空空空如也～</div>
-      <good-card v-for="(item, index) in goodList" :key="index" :listCard="item"></good-card>
+      <good-card v-for="(item, index) in goodList"
+                 :key="index"
+                 @addToCart="addCart"
+                 :listCard="item"></good-card>
     </div>
   </div>
 </template>
@@ -94,6 +97,14 @@ export default {
     //      let innerHeight = window.innerHeight
     //      console.log(`${scrollTop}`, `${scrollHeight}`, `${offsetHeight}`, `${clientHeight}`)
     //      console.log(`${scrollTop}` + `${clientHeight}`, `${scrollHeight}`, `${offsetHeight}`, `${innerHeight}`)
+    },
+    addCart (productId) {
+      console.log(productId)
+      this.$ajax.post('/goods/addCart', {
+        productId: productId
+      }).then(res => {
+        //
+      })
     },
     getGoodList () {
       this.$ajax.get('/goods', this.params).then(res => {

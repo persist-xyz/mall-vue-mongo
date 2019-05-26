@@ -5,7 +5,7 @@
       <p class="black2 font16">{{listCard.productName}}</p>
       <span class="marginTop10 orange font16 font500">¥ {{listCard.salePrice}}</span>
     </div>
-    <span class="addToCart">加入购物车</span>
+    <span class="addToCart" @click="addCart(listCard)">加入购物车</span>
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    addCart (listCard) {
+      this.$emit('addToCart', listCard.productId)
     }
   }
 }

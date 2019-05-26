@@ -18,6 +18,8 @@ mongoose.connection.on('disconnected', () => {
   console.log('MongoDB connected disconnected')
 })
 
+// const errorHandle = () => {}
+
 /**
  * 商品列表
  * 升降序 分页 价格筛选
@@ -74,6 +76,99 @@ router.get('/goods', (req, res, next) => {
         result: {
           list: doc,
           count: doc.length
+        }
+      })
+    }
+  })
+})
+
+/**
+ * 加入购物车
+ * 1、查找该用户信息
+ * 2、查找该商品信息
+ * 3、获取该用户下的购物车中是否有该件商品
+ * 4、改变购物车字段
+ * 5、更新数据库
+ */
+router.post('/addCart', (req, res, next) => {
+  const {productId} = req.body
+  let User = require('../modules/users')
+  // 1、查找该用户 userId: userId
+  let userId = '100000077'
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        status: '1',
+        result: {
+          msg: err.message
+        }
+      })
+    } else {
+      // 2、查找该商品信息
+      Goods.findOne({productId: productId}, (err2, goodDao) => {
+        if (err2) {
+          res.json({
+            status: '1',
+            result: {
+              msg: err2.message
+            }
+          })
+        } else {
+          let hasThisGood = false
+          // 3、获取该用户下的购物车中是否有该件商品
+          userDao.cartList.map(list => {
+            if (list.productId === productId) {
+              list.productNum++
+              hasThisGood = true
+            }
+          })
+          // 获得的单条商品信息
+          if (goodDao) {
+            if (hasThisGood) {
+              // 直接保存
+              userDao.save((err3, doc1) => {
+                if (err3) {
+                  res.json({
+                    status: '1',
+                    result: {
+                      msg: err3.message
+                    }
+                  })
+                } else {
+                  res.json({
+                    status: '200',
+                    result: {
+                      msg: 'success'
+                    }
+                  })
+                }
+              })
+            } else {
+              // 更新购物车商品数量
+              goodDao.productNum = 1
+              goodDao.checked = 1
+              // 更新用户表购物车
+              userDao.cartList.push(goodDao)
+              // 更新数据库
+              userDao.save((err4, doc2) => {
+                if (err4) {
+                  res.json({
+                    status: '1',
+                    result: {
+                      msg: err4.message
+                    }
+                  })
+                } else {
+                  res.json({
+                    status: '200',
+                    result: {
+                      msg: 'success'
+                    }
+                  })
+                }
+              })
+            }
+          }
         }
       })
     }
