@@ -6,21 +6,28 @@
         <ul>
           <li v-for="(item, index) in filterList"
               :class="{'activePrice': activePriceIndex === index}"
-              :key="index" @click="filterOption(item, index)">{{item.minPrice}} - {{item.maxPrice}}</li>
+              :key="index" @click="filterOption(item, index)">
+            <span v-if="item.minPrice === ''"> All </span>
+            <span v-else-if="item.minPrice !== '' && item.maxPrice === ''">{{item.minPrice}} 以上</span>
+            <span v-else>{{item.minPrice}} - {{item.maxPrice}}</span>
+          </li>
         </ul>
       </div>
       <div class="filter-list">
         <span>价格：</span>
         <ul>
+          <li :class="{'activePrice': params.sort === ''}" @click="resetParams(), params.sort = '', getGoodList()">DEFAULT</li>
           <li :class="{'activePrice': params.sort === 1}" @click="resetParams(), params.sort = 1, getGoodList()">升序</li>
           <li :class="{'activePrice': params.sort === -1}" @click="resetParams(), params.sort = -1, getGoodList()">降序</li>
         </ul>
       </div>
     </div>
-    <div class="content-list"
-         v-infinite-scroll="getGoodList"
-         :infinite-scroll-disabled="busy"
+
+    <div v-infinite-scroll="getGoodList"
+         infinite-scroll-disabled="busy"
+         class="content-list"
          infinite-scroll-distance="10">
+      <div v-if="isEmpty" class="text-center font14 gray2 marginTop10">空空空如也～</div>
       <good-card v-for="(item, index) in goodList" :key="index" :listCard="item"></good-card>
     </div>
   </div>
@@ -35,6 +42,10 @@ export default {
   data () {
     return {
       filterList: [
+        {
+          minPrice: '',
+          maxPrice: ''
+        },
         {
           minPrice: 0,
           maxPrice: 100
@@ -53,17 +64,18 @@ export default {
         },
         {
           minPrice: 5000,
-          maxPrice: 10000
+          maxPrice: ''
         }
       ],
       goodList: [],
       activePriceIndex: 0,
       activeSortIndex: 0,
+      isEmpty: false,
       busy: false,
       params: {
-        sort: 1,
-        minPrice: 0,
-        maxPrice: 10000000,
+        sort: '',
+        minPrice: '',
+        maxPrice: '',
         currentPage: 1,
         pageNum: 8
       }
@@ -84,29 +96,28 @@ export default {
     //      console.log(`${scrollTop}` + `${clientHeight}`, `${scrollHeight}`, `${offsetHeight}`, `${innerHeight}`)
     },
     getGoodList () {
-      this.busy = true
       this.$ajax.get('/goods', this.params).then(res => {
-        this.goodList = this.goodList.concat(res.result.list)
-        this.params.currentPage++
-        this.busy = false
+        if (res.status === '200') {
+          this.goodList = this.goodList.concat(res.result.list)
+          this.params.currentPage++
+          this.isEmpty = this.goodList.length === 0 ? 1 : 0
+          this.busy = res.result.count < this.params.pageNum ? 1 : 0
+        } else {
+          this.busy = true
+        }
       })
     },
     // 价格过滤
     filterOption (item, index) {
       this.resetParams()
       this.activePriceIndex = index
-      this.params.minPrice = (item && item.minPrice) || 0
-      this.params.maxPrice = (item && item.maxPrice) || 10000000
+      this.params.minPrice = item.minPrice
+      this.params.maxPrice = item.maxPrice
       this.getGoodList()
     },
     resetParams () {
-      this.params = {
-        sort: 1,
-        minPrice: 0,
-        maxPrice: 10000000,
-        currentPage: 1,
-        pageNum: 8
-      }
+      this.params.currentPage = 1
+      this.params.pageNum = 8
       this.goodList = []
     }
   }
@@ -137,6 +148,7 @@ export default {
           &:hover{
             color: #f56000;
             background: #ebeeef;
+            border-radius: 20px;
           }
           &.activePrice{
             color: #fff;
@@ -146,9 +158,6 @@ export default {
           }
         }
       }
-    }
-
-    .content-list{
     }
   }
 </style>

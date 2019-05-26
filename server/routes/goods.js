@@ -2,9 +2,9 @@ let express = require('express')
 let router = express.Router()
 let mongoose = require('mongoose')
 
-let Good = require('../modules/goods')
+let Goods = require('../modules/goods')
 
-mongoose.connect('mongodb://localhost:27017/mall')
+mongoose.connect('mongodb://localhost:27017/mall', {useNewUrlParser: true})
 
 mongoose.connection.on('connected', () => {
   console.log('MongoDB connected succ')
@@ -26,10 +26,40 @@ mongoose.connection.on('disconnected', () => {
 router.get('/goods', (req, res, next) => {
   // 获取请求参数
   let {sort, currentPage, pageNum, minPrice, maxPrice} = req.query
+  minPrice = minPrice === '' ? '' : parseInt(minPrice)
+  maxPrice = maxPrice === '' ? '' : parseInt(maxPrice)
+  pageNum = parseInt(pageNum)
+  currentPage = parseInt(currentPage)
+  let salePriceCheck = {}
+  // 价格过滤
+  if (minPrice !== '' || maxPrice !== '') {
+    console.log(typeof minPrice, minPrice, maxPrice)
+    // 区间
+    if (maxPrice !== '') {
+      salePriceCheck = {
+        salePrice: {
+          $gt: minPrice,
+          $lte: maxPrice
+        }
+      }
+    } else {
+      console.log('----', minPrice, maxPrice)
+      // 以上
+      salePriceCheck = {
+        salePrice: {
+          $gt: minPrice
+        }
+      }
+    }
+  }
+  // 分页
+  let skip = pageNum * (currentPage - 1)
   // 得到查询模型
-  let GoodsModel = Good.find({salePrice: {$gte: Number(minPrice), $lte: Number(maxPrice)}}, null, {limit: Number(pageNum), skip: Number(pageNum) * (Number(currentPage) - 1)})
-  // 根据价格排序
-  GoodsModel.sort({'salePrice': sort})
+  let GoodsModel = Goods.find(salePriceCheck).skip(skip).limit(pageNum)
+  // 价格排序
+  if (sort !== '') {
+    GoodsModel.sort({'salePrice': sort})
+  }
   // 执行
   GoodsModel.exec({}, (err, doc) => {
     if (err) {

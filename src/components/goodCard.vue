@@ -2,8 +2,8 @@
   <div class="goods-card">
     <div class="img-div" :style="{'background-image': `url(/static/image/${listCard.productImage})`}"></div>
     <div class="note">
-      <p class="black2">{{listCard.productName}}</p>
-      <span class="gray2 marginTop10">¥ {{listCard.salePrice}}</span>
+      <p class="black2 font16">{{listCard.productName}}</p>
+      <span class="marginTop10 orange font16 font500">¥ {{listCard.salePrice}}</span>
     </div>
     <span class="addToCart">加入购物车</span>
   </div>

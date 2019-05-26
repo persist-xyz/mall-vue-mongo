@@ -1,3 +1,5 @@
+@import "../iconfont/iconfont.css";
+
 html {
   height: 100%;
   font-size: 14px;
@@ -39,21 +41,6 @@ body {
   overflow-x: hidden;
 }
 
-.main-container {
-  position: relative;
-  min-height: calc(100vh - 84px);
-}
-
-.main-content {
-  position: relative;
-  margin: 10px;
-  padding: 10px;
-  background-color: #fff;
-  &.min-height {
-    min-height: calc(100vh - 134px);
-  }
-}
-
 .font12{
   font-size:12px;
 }
@@ -72,7 +59,9 @@ body {
 .font22{
   font-size:22px;
 }
-
+.font500{
+  font-weight:500;
+}
 
 .black{
   color: #000;
@@ -89,6 +78,10 @@ body {
 .white{
   color: #fff;
 }
+.orange{
+  color: #f56000;
+}
+
 .marginTop10{
   margin-top:10px;
 }
@@ -96,6 +89,15 @@ body {
   margin-bottom:10px;
 }
 
+.text-center{
+  text-align: center;
+}
+.text-left{
+  text-align: left;
+}
+.text-right{
+  text-align: right;
+}
 
 
 

@@ -2,6 +2,10 @@
   <div class="nav">
     <div class="logo"></div>
     <div class="user" @mouseenter="showMenu = true" @mouseleave="showMenu = false">
+      <div class="cart">
+        <i class="iconfont icon-cart"></i>
+        <span>88</span>
+      </div>
       <div class="uesr-img"></div>
       <span class="name">username</span>
       <div class="login-status" v-show="showMenu">
@@ -49,7 +53,12 @@ export default {
   z-index: 1000;
   background:rgba(255,255,255,1);
   box-shadow:0px 1px 4px 0px rgba(0,0,0,0.1);
-  .logo{}
+  .logo{
+    width:96px;
+    height:60px;
+    background: url("/static/image/ff.jpg") no-repeat;
+    background-size: contain;
+  }
   .user{
     display: flex;
     align-items: center;
@@ -63,6 +72,7 @@ export default {
       -webkit-background-size: cover;
       background-size: cover;
       margin-right:10px;
+      margin-left: 40px;
     }
     .login-status{
       position: absolute;
@@ -95,12 +105,26 @@ export default {
         top:-10px;
         width: 0;
         content: ' ';
-        width: 0;
         height: 0;
         border-width: 0 10px 10px;
         border-style: solid;
         border-color: transparent transparent #D3DCE6;
       }
+    }
+  }
+  .cart{
+    position: relative;
+    .icon-cart{
+      font-size: 30px;
+    }
+    span{
+      position: absolute;
+      top: -10px;
+      left: 15px;
+      color: #fff;
+      background: #f00;
+      padding: 4px 8px;
+      border-radius: 20px;
     }
   }
 }
