@@ -14,6 +14,10 @@ module.exports = {
       '/goods': {
         target: proxyServer,
         changeOrigin: true //可否跨域
+      },
+      '/users/*': {
+        target: proxyServer,
+        changeOrigin: true //可否跨域
       }
     },
     // Various Dev Server settings

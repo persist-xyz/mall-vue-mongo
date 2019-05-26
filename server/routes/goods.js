@@ -25,7 +25,7 @@ mongoose.connection.on('disconnected', () => {
  * 升降序 分页 价格筛选
  * params 升序/降序 当前页数 每页条数
  */
-router.get('/goods', (req, res, next) => {
+router.get('/list', (req, res, next) => {
   // 获取请求参数
   let {sort, currentPage, pageNum, minPrice, maxPrice} = req.query
   minPrice = minPrice === '' ? '' : parseInt(minPrice)
@@ -66,12 +66,12 @@ router.get('/goods', (req, res, next) => {
   GoodsModel.exec({}, (err, doc) => {
     if (err) {
       res.json({
-        status: '1',
+        code: '1',
         msg: err.message
       })
     } else {
       res.json({
-        status: '200',
+        code: '0',
         msg: 'success',
         result: {
           list: doc,
@@ -98,20 +98,16 @@ router.post('/addCart', (req, res, next) => {
   User.findOne({userId: userId}, (err, userDao) => {
     if (err) {
       res.json({
-        status: '1',
-        result: {
-          msg: err.message
-        }
+        code: '1',
+        msg: err.message
       })
     } else {
       // 2、查找该商品信息
       Goods.findOne({productId: productId}, (err2, goodDao) => {
         if (err2) {
           res.json({
-            status: '1',
-            result: {
-              msg: err2.message
-            }
+            code: '1',
+            msg: err2.message
           })
         } else {
           let hasThisGood = false
@@ -129,17 +125,13 @@ router.post('/addCart', (req, res, next) => {
               userDao.save((err3, doc1) => {
                 if (err3) {
                   res.json({
-                    status: '1',
-                    result: {
-                      msg: err3.message
-                    }
+                    code: '1',
+                    msg: err3.message
                   })
                 } else {
                   res.json({
-                    status: '200',
-                    result: {
-                      msg: 'success'
-                    }
+                    code: '0',
+                    msg: 'success'
                   })
                 }
               })
@@ -153,17 +145,13 @@ router.post('/addCart', (req, res, next) => {
               userDao.save((err4, doc2) => {
                 if (err4) {
                   res.json({
-                    status: '1',
-                    result: {
-                      msg: err4.message
-                    }
+                    code: '1',
+                    msg: err4.message
                   })
                 } else {
                   res.json({
-                    status: '200',
-                    result: {
-                      msg: 'success'
-                    }
+                    code: '0',
+                    msg: 'success'
                   })
                 }
               })

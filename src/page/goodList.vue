@@ -22,7 +22,6 @@
         </ul>
       </div>
     </div>
-
     <div v-infinite-scroll="getGoodList"
          infinite-scroll-disabled="busy"
          class="content-list"
@@ -107,14 +106,15 @@ export default {
       })
     },
     getGoodList () {
-      this.$ajax.get('/goods', this.params).then(res => {
-        if (res.status === '200') {
+      this.$ajax.get('/goods/list', this.params).then(res => {
+        if (res.code === '0') {
           this.goodList = this.goodList.concat(res.result.list)
           this.params.currentPage++
           this.isEmpty = this.goodList.length === 0 ? 1 : 0
           this.busy = res.result.count < this.params.pageNum ? 1 : 0
         } else {
           this.busy = true
+          alert(res.msg)
         }
       })
     },

@@ -21,6 +21,20 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use((req, res, next) => {
+  if (req.cookies.userId) {
+    next()
+  } else if (req.path === '/users/login' || req.path === '/users/loginOut' || req.path === '/goods/list') {
+    next()
+  } else {
+    res.json({
+      code: '1',
+      msg: 'need to login',
+      result: {}
+    })
+  }
+})
+
 app.use('/', goods)
 app.use('/goods', goods)
 app.use('/users', users)
