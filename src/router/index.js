@@ -12,7 +12,8 @@ const router = new Router({
     {
       path: '/goodList',
       name: 'goodList',
-      component: resolve => require(['@/page/goodList'], resolve),
+      component: () => System.import('@/page/goodList'),
+      // component: resolve => require(['@/page/goodList'], resolve),
       meta: {
         title: '商品列表页'
       }

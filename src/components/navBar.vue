@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="logo"></div>
     <div class="user" @mouseleave="showMenu = false">
-      <div class="cart">
+      <div class="cart" @click="toMyCart">
         <i class="iconfont icon-icon-test"></i>
         <span v-show="cartCount !== 0">{{cartCount}}</span>
       </div>
@@ -91,6 +91,11 @@ export default {
           this.hasLogin = true
         }
       })
+    },
+    toMyCart () {
+      this.$router.push({
+        name: 'shoppingCart'
+      })
     }
   }
 }
@@ -120,7 +125,7 @@ export default {
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;
     border-radius: 100%;
-    background: url("/static/image/7.jpg") no-repeat;
+    background: url(~assets/image/logo.jpg) no-repeat;
     background-size: contain;
   }
   .user{

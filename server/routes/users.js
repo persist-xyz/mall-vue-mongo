@@ -115,4 +115,29 @@ router.get('/checkLogin', (req, res, next) => {
   }
 })
 
+/**
+ * 购物车列表
+ */
+router.get('/cartList', (req, res, next) => {
+  const userId = req.cookies.userId
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        msg: err.message,
+        result: {}
+      })
+    } else {
+      console.log(userDao)
+      res.json({
+        code: '0',
+        msg: 'succ',
+        result: {
+          cartList: userDao.cartList
+        }
+      })
+    }
+  })
+})
+
 module.exports = router
