@@ -34,7 +34,7 @@
       </div>
       <div class="right">
         <span class="gray2 font16">Item Total: <span class="orange font18">{{totalPrice}}</span> </span>
-        <span class="btn">CHECKOUT</span>
+        <span class="btn" @click="checkout">CHECKOUT</span>
       </div>
     </div>
   </div>
@@ -85,6 +85,11 @@ export default {
         } else {
           alert(res.message)
         }
+      })
+    },
+    checkout () {
+      this.$router.push({
+        name: 'addressList'
       })
     }
   }
@@ -184,7 +189,6 @@ export default {
         height: 30px;
       }
     }
-    .right{}
     .btn{
       color: #fff;
       background: #f56000;

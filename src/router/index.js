@@ -33,6 +33,30 @@ const router = new Router({
       meta: {
         title: '收货地址'
       }
+    },
+    {
+      path: '/addressList',
+      name: 'addressList',
+      component: resolve => require(['@/page/addressList'], resolve),
+      meta: {
+        title: '选择送货地址'
+      }
+    },
+    {
+      path: '/viewOrder',
+      name: 'viewOrder',
+      component: resolve => require(['@/page/viewOrder'], resolve),
+      meta: {
+        title: '订单预览'
+      }
+    },
+    {
+      path: '/orderSuccess',
+      name: 'orderSuccess',
+      component: resolve => require(['@/page/orderSuccess'], resolve),
+      meta: {
+        title: '下单成功'
+      }
     }
   ],
   scrollBehavior (to, from, savedPosition) {
