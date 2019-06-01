@@ -14,7 +14,7 @@
         <span>order confirnmtion</span>
       </li>
     </ul>
-    <div class="main">
+    <div class="main succ">
       <img src="@/assets/image/logo.jpg" alt="">
       <p>Congratulation</p>
       <p>Your order is under processing!</p>
@@ -82,7 +82,7 @@ export default {
       }
     }
   }
-  .main{
+  .succ{
     margin: 50px 0;
     img{
       width:200px;

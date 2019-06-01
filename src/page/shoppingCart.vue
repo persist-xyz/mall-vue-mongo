@@ -171,6 +171,7 @@ export default {
       }
       .del{
         width:210px;
+        cursor: pointer;
       }
     }
   }

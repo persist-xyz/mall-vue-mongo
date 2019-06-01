@@ -92,6 +92,7 @@ router.post('/loginOut', (req, res, next) => {
     result: {}
   })
 })
+
 /**
  * 检查登陆状态
  * 10001: 未登陆
@@ -164,6 +165,90 @@ router.post('/delCart', (req, res, next) => {
         code: '0',
         message: 'succ',
         result: {}
+      })
+    }
+  })
+})
+
+/**
+ * 获取收货地址
+ */
+router.get('/getAddressList', (req, res, next) => {
+  const userId = req.cookies.userId
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      res.json({
+        code: '0',
+        message: 'succ',
+        result: {
+          addressList: userDao.addressList
+        }
+      })
+    }
+  })
+})
+
+/**
+ * 删除地址
+ */
+router.post('/delThisAddress', (req, res, next) => {
+  const userId = req.cookies.userId
+  const addressId = req.body.addressId
+  User.update({userId: userId}, {
+    $pull: {
+      'addressList': {
+        addressId: addressId
+      }
+    }
+  }, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      res.json({
+        code: '0',
+        message: 'succ',
+        result: {}
+      })
+    }
+  })
+})
+
+/**
+ * 预览 订单列表
+ */
+router.get('/getOrderList', (req, res, next) => {
+  const userId = req.cookies.userId
+  const orderId = '6224201705302250301' // req.body.orderId
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      let orderList = []
+      userDao.orderList.map(list => {
+        if (list.orderId === orderId) {
+          orderList = list
+        }
+      })
+      res.json({
+        code: '0',
+        message: 'succ',
+        result: {
+          orderList: orderList
+        }
       })
     }
   })

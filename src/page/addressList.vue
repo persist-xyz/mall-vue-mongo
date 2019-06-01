@@ -16,24 +16,20 @@
     </ul>
     <div class="main">
       <ul class="content">
-        <li class="black2 active">
-          <h5 class="font16 line-height30">朱一龙</h5>
-          <p class="font14 line-height30 marginBottom10">徐汇区</p>
-          <p class="font16 gray line-height30 marginTop10">15200001111</p>
+        <li class="black2"
+            @click="chooseThis(list)"
+            v-for="(list, index) in addressList"
+            :key="index"
+            :class="{'active': list.isDefault}" >
+          <h5 class="font16 line-height30">{{list.userName}}</h5>
+          <p class="font14 line-height30 marginBottom10">{{list.streetName}}</p>
+          <p class="font16 gray line-height30 marginTop10 marginBottom10">{{list.tel}}</p>
           <p class="font14">
-            <span class="default orange">default address</span>
-            <span class="del hide">del</span>
+            <span class="default orange" v-if="list.isDefault">default address</span>
+            <span class="del hide" @click.stop="delThis(list)">del</span>
           </p>
         </li>
-        <li class="black2">
-          <h5 class="font16 line-height30">朱一龙</h5>
-          <p class="font14 line-height30 marginBottom10">徐汇区</p>
-          <p class="font16 gray line-height30 marginTop10">15200001111</p>
-          <p class="font14">
-            <span class="default orange">default address</span>
-            <span class="del hide">del</span>
-          </p>
-        </li>
+
         <li class="add-address gray2">
           <span class="add">+</span>
           <span>add new address</span>
@@ -49,10 +45,32 @@
     name: '',
     data () {
       return {
+        addressList: []
       }
     },
     mounted () {
-
+      this.getAddressList()
+    },
+    methods: {
+      getAddressList () {
+        this.$ajax.get('/users/getAddressList').then(res => {
+          if (res.code === '0') {
+            this.addressList = res.result.addressList
+          }
+        })
+      },
+      chooseThis (list) {
+        this.addressList.map(list => list.isDefault = false)
+        list.isDefault = true
+      },
+      delThis (list) {
+        console.log(list.addressId)
+        this.$ajax.post('/users/delThisAddress', {addressId: list.addressId}).then(res => {
+          if (res.code === '0') {
+            this.getAddressList()
+          }
+        })
+      }
     }
   }
 </script>
@@ -98,11 +116,12 @@
       .content{
         display: flex;
         justify-content: flex-start;
+        flex-wrap: wrap;
         li{
           border:2px solid #eee;
           padding:15px;
           margin:10px;
-          width: 300px;
+          width: 280px;
           height: 160px;
           .del{
             float: right;

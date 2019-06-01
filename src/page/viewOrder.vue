@@ -22,39 +22,35 @@
         <li>SubTotal</li>
       </ul>
       <ul class="list">
-        <li>
+        <li v-for="(list, index) in orderList" :key="index">
           <div class="choose">
-            <img :src="`/static/image/1.jpg`" alt="">
-            <h4>朱一龙啊朱一龙</h4>
+            <img :src="`/static/image/${list.productImage}`" alt="">
+            <h4>{{list.productName}}</h4>
           </div>
-          <span class="price black2">9999</span>
+          <span class="price black2">{{list.salePrice}}</span>
           <div class="edit">
-            <span> * 1</span>
+            <span> * {{list.productNum}}</span>
           </div>
-          <span class="total-price orange">888888</span>
+          <span class="total-price orange">{{list.salePrice * list.productNum}}</span>
         </li>
       </ul>
     </div>
     <ul class="count">
       <li>
         <span class="label">Item SubTotal：</span>
-        <span class="price">9999</span>
+        <span class="price">{{preTotalPrice}}</span>
       </li>
       <li>
         <span class="label">Shipping：</span>
-        <span class="price">100</span>
+        <span class="price">{{shipping}}</span>
       </li>
       <li>
         <span class="label">Discount：</span>
-        <span class="price">0</span>
-      </li>
-      <li>
-        <span class="label">Tak：</span>
-        <span class="price">400</span>
+        <span class="price">{{discount}}</span>
       </li>
       <li>
         <span class="label">Order Total：</span>
-        <span class="price">8888</span>
+        <span class="price">{{totalPrice}}</span>
       </li>
     </ul>
     <router-link class="next" to="orderSuccess">To Payment</router-link>
@@ -66,10 +62,26 @@ export default {
   name: '',
   data () {
     return {
+      orderList: [],
+      shipping: 0,
+      discount: 100,
+      preTotalPrice: 0,
+      totalPrice: 0
     }
   },
   mounted () {
-
+    this.getOrderList()
+  },
+  methods: {
+    getOrderList () {
+      this.$ajax.get('/users/getOrderList', {order: ''}).then(res => {
+        if (res.code === '0') {
+          this.orderList = res.result.orderList.goodsList
+          this.orderList.map(list => this.preTotalPrice += list.salePrice * list.productNum )
+          this.totalPrice = this.preTotalPrice - this.shipping - this.discount
+        }
+      })
+    }
   }
 }
 </script>
