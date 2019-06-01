@@ -18,9 +18,9 @@
           </div>
           <span class="price black2">{{list.salePrice}}</span>
           <div class="edit">
-            <span @click="list.productNum--">-</span>
-            <input type="text" v-model="list.productNum" />
-            <span @click="list.productNum++">+</span>
+            <span @click="list.productNum--, updateCart(list)">-</span>
+            <input type="text" v-model="list.productNum" @change="updateCart(list)" />
+            <span @click="list.productNum++, updateCart(list)">+</span>
           </div>
           <span class="total-price orange">{{list.salePrice * list.productNum}}</span>
           <span class="del" @click="delCart(list)">del</span>
@@ -72,10 +72,25 @@ export default {
     },
     chooseItem (list) {
       list.checked = list.checked == 1 ? 0 : 1
+      let _checkedLength = 0
+      this.cartList.map(list => {
+        if (list.checked) {
+          _checkedLength += 1
+        }
+      })
+      this.checkAll = this.cartList.length === _checkedLength
+      this.updateCart(list)
     },
     getCartList () {
       this.$ajax.get('/users/cartList').then(res => {
         this.cartList = res.result.cartList
+        let _checkedLength = 0
+        this.cartList.map(list => {
+          if (list.checked) {
+            _checkedLength += 1
+          }
+        })
+        this.checkAll = this.cartList.length === _checkedLength
       })
     },
     delCart (list) {
@@ -90,6 +105,17 @@ export default {
     checkout () {
       this.$router.push({
         name: 'addressList'
+      })
+    },
+    updateCart (list) {
+      this.$ajax.post('/users/updateCart', {
+        productId: list.productId,
+        productNum: list.productNum,
+        checked: list.checked
+      }).then(res => {
+        if (res.code !== '0') {
+          alert(res.message)
+        }
       })
     }
   }

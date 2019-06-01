@@ -171,6 +171,31 @@ router.post('/delCart', (req, res, next) => {
 })
 
 /**
+ * 更新购物车
+ */
+router.post('/updateCart', (req, res, next) => {
+  const userId = req.cookies.userId
+  const {productId, productNum, checked} = req.body
+  User.update(
+    {userId: userId, 'cartList.productId': productId},
+    {'cartList.$.productNum': productNum},
+    {'cartList.$.checked': checked}, (err, userDao) => {
+      if (err) {
+        res.json({
+          code: '1',
+          message: err.message,
+          result: {}
+        })
+      } else {
+        res.json({
+          code: '0',
+          message: 'succ',
+          result: {}
+        })
+      }
+    })
+})
+/**
  * 获取收货地址
  */
 router.get('/getAddressList', (req, res, next) => {
