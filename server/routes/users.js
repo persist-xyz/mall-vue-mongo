@@ -140,4 +140,32 @@ router.get('/cartList', (req, res, next) => {
   })
 })
 
+/**
+ * 删除购物车
+ */
+router.post('/delCart', (req, res, next) => {
+  const productId = req.body.productId
+  const userId = req.cookies.userId
+  User.update({userId: userId}, {
+    $pull: {
+      'cartList': {
+        productId: productId
+      }
+    }
+  }, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      res.json({
+        code: '0',
+        message: 'succ',
+        result: {}
+      })
+    }
+  })
+})
 module.exports = router

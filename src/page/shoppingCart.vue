@@ -12,7 +12,7 @@
       <ul class="list">
         <li v-for="(list, index) in cartList" :key="index">
           <div class="choose">
-            <input type="checkbox">
+            <input type="checkbox" :checked="list.checked == 1" @change="chooseItem(list)"/>
             <img :src="`/static/image/${list.productImage}`" alt="">
             <h4>{{list.productName}}</h4>
           </div>
@@ -23,17 +23,17 @@
             <span @click="list.productNum++">+</span>
           </div>
           <span class="total-price orange">{{list.salePrice * list.productNum}}</span>
-          <span class="del">del</span>
+          <span class="del" @click="delCart(list)">del</span>
         </li>
       </ul>
     </div>
     <div class="bottom">
       <div class="left">
-        <input type="checkbox">
+        <input type="checkbox" :checked="checkAll" @change="checkAllFn">
         <span class="font16">全选</span>
       </div>
       <div class="right">
-        <span class="gray2 font16">Item Total: <span class="orange font18">totalPrice</span> </span>
+        <span class="gray2 font16">Item Total: <span class="orange font18">{{totalPrice}}</span> </span>
         <span class="btn">CHECKOUT</span>
       </div>
     </div>
@@ -45,18 +45,46 @@ export default {
   name: '',
   data () {
     return {
-      totalPrice: 0,
+      checkAll: 0,
       cartList: []
     }
   },
   mounted () {
     this.getCartList()
   },
+  computed: {
+    totalPrice () {
+      let total = 0
+      this.cartList.length && this.cartList.map(list => {
+        if (list.checked == 1) {
+          total += list.productNum * list.salePrice
+        }
+      })
+      return total
+    }
+  },
   methods: {
+    checkAllFn () {
+      this.checkAll = this.checkAll ? 0 : 1
+      this.cartList.length && this.cartList.map(list => {
+        list.checked = this.checkAll === 1 ? 1 : 0
+      })
+    },
+    chooseItem (list) {
+      list.checked = list.checked == 1 ? 0 : 1
+    },
     getCartList () {
       this.$ajax.get('/users/cartList').then(res => {
-        //cartList
         this.cartList = res.result.cartList
+      })
+    },
+    delCart (list) {
+      this.$ajax.post('/users/delCart', {productId: list.productId}).then(res => {
+        if (res.code === '0') {
+          this.getCartList()
+        } else {
+          alert(res.message)
+        }
       })
     }
   }
