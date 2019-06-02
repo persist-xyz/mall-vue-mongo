@@ -53,7 +53,7 @@
         <span class="price">{{totalPrice}}</span>
       </li>
     </ul>
-    <router-link class="next" to="orderSuccess">To Payment</router-link>
+    <div class="next" @click="nextToSucc">To Payment</div>
   </div>
 </template>
 
@@ -74,11 +74,27 @@ export default {
   },
   methods: {
     getOrderList () {
-      this.$ajax.get('/users/getOrderList', {order: ''}).then(res => {
+      this.$ajax.get('/users/getOrderList').then(res => {
         if (res.code === '0') {
-          this.orderList = res.result.orderList.goodsList
+          this.orderList = res.result.orderList
           this.orderList.map(list => this.preTotalPrice += list.salePrice * list.productNum )
-          this.totalPrice = this.preTotalPrice - this.shipping - this.discount
+          this.totalPrice = this.preTotalPrice + this.shipping - this.discount
+        }
+      })
+    },
+    nextToSucc () {
+      // 创建订单
+      this.$ajax.post('/users/payment', {
+        addressId: this.$route.query.addressId,
+        totalPrice: this.totalPrice
+      }).then(res => {
+        if (res.code === '0') {
+          this.$router.push({
+            name: 'orderSuccess',
+            query: {
+              orderId: res.result.orderId
+            }
+          })
         }
       })
     }

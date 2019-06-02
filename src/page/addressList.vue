@@ -17,7 +17,7 @@
     <div class="main">
       <ul class="content">
         <li class="black2"
-            @click="chooseThis(list)"
+            @click="setDefault(list)"
             v-for="(list, index) in addressList"
             :key="index"
             :class="{'active': list.isDefault}" >
@@ -26,6 +26,7 @@
           <p class="font16 gray line-height30 marginTop10 marginBottom10">{{list.tel}}</p>
           <p class="font14">
             <span class="default orange" v-if="list.isDefault">default address</span>
+            <span class="default orange set hide" v-else @click="setDefault(list)">set address</span>
             <span class="del hide" @click.stop="delThis(list)">del</span>
           </p>
         </li>
@@ -36,7 +37,7 @@
         </li>
       </ul>
     </div>
-    <router-link class="next" to="/viewOrder">Next</router-link>
+    <div class="next" @click="nextToViewOrder">Next</div>
   </div>
 </template>
 
@@ -45,7 +46,8 @@
     name: '',
     data () {
       return {
-        addressList: []
+        addressList: [],
+        addressId: ''
       }
     },
     mounted () {
@@ -59,15 +61,28 @@
           }
         })
       },
-      chooseThis (list) {
-        this.addressList.map(list => list.isDefault = false)
+      setDefault (list) {
+        this.addressId = list.addressId
+        this.addressList.map(item => item.isDefault = false)
         list.isDefault = true
+        this.$ajax.post('/users/editDefaultAddress', {addressId: this.addressId}).then(res => {
+          if (res.code !== '0') {
+            alert(res.message)
+          }
+        })
       },
       delThis (list) {
-        console.log(list.addressId)
         this.$ajax.post('/users/delThisAddress', {addressId: list.addressId}).then(res => {
           if (res.code === '0') {
             this.getAddressList()
+          }
+        })
+      },
+      nextToViewOrder () {
+        this.$router.push({
+          name: 'viewOrder',
+          query: {
+            addressId: this.addressId
           }
         })
       }
@@ -130,6 +145,9 @@
             cursor: pointer;
             background: #eeeeee75;
             .del{
+              display: inline-block;
+            }
+            .set{
               display: inline-block;
             }
           }

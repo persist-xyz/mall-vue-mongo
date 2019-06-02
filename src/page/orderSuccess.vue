@@ -19,8 +19,8 @@
       <p>Congratulation</p>
       <p>Your order is under processing!</p>
       <p class="note">
-        orderId: 222222 <br/>
-        price: 88888
+        orderId: {{orderInfo.orderId}} <br/>
+        price: {{orderInfo.orderTotal}}
       </p>
       <p class="note">
       </p>
@@ -37,10 +37,20 @@ export default {
   name: '',
   data () {
     return {
+      orderInfo: {}
     }
   },
   mounted () {
-
+    this.getOrderdetail()
+  },
+  methods: {
+    getOrderdetail () {
+      this.$ajax.get('/users/getOrderdetail', {orderId: this.$route.query.orderId}).then(res => {
+        if (res.code === '0') {
+          this.orderInfo = res.result.orderInfo
+        }
+      })
+    }
   }
 }
 </script>

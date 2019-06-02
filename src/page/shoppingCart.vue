@@ -12,7 +12,7 @@
       <ul class="list">
         <li v-for="(list, index) in cartList" :key="index">
           <div class="choose">
-            <input type="checkbox" :checked="list.checked == 1" @change="chooseItem(list)"/>
+            <input type="checkbox" :checked="list.checked === '1'" @change="chooseItem(list)"/>
             <img :src="`/static/image/${list.productImage}`" alt="">
             <h4>{{list.productName}}</h4>
           </div>
@@ -56,7 +56,7 @@ export default {
     totalPrice () {
       let total = 0
       this.cartList.length && this.cartList.map(list => {
-        if (list.checked == 1) {
+        if (list.checked === '1') {
           total += list.productNum * list.salePrice
         }
       })
@@ -67,14 +67,14 @@ export default {
     checkAllFn () {
       this.checkAll = this.checkAll ? 0 : 1
       this.cartList.length && this.cartList.map(list => {
-        list.checked = this.checkAll === 1 ? 1 : 0
+        list.checked = this.checkAll === 1 ? '1' : '0'
       })
     },
     chooseItem (list) {
-      list.checked = list.checked == 1 ? 0 : 1
+      list.checked = list.checked === '1' ? '0' : '1'
       let _checkedLength = 0
       this.cartList.map(list => {
-        if (list.checked) {
+        if (list.checked === '1') {
           _checkedLength += 1
         }
       })
@@ -86,7 +86,7 @@ export default {
         this.cartList = res.result.cartList
         let _checkedLength = 0
         this.cartList.map(list => {
-          if (list.checked) {
+          if (list.checked === '1') {
             _checkedLength += 1
           }
         })

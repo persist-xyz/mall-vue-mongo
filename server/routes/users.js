@@ -129,7 +129,6 @@ router.get('/cartList', (req, res, next) => {
         result: {}
       })
     } else {
-      console.log(userDao)
       res.json({
         code: '0',
         msg: 'succ',
@@ -177,9 +176,10 @@ router.post('/updateCart', (req, res, next) => {
   const userId = req.cookies.userId
   const {productId, productNum, checked} = req.body
   User.update(
-    {userId: userId, 'cartList.productId': productId},
-    {'cartList.$.productNum': productNum},
-    {'cartList.$.checked': checked}, (err, userDao) => {
+    {userId: userId, 'cartList.productId': productId}, {
+      'cartList.$.productNum': productNum,
+      'cartList.$.checked': checked
+    }, (err, userDao) => {
       if (err) {
         res.json({
           code: '1',
@@ -249,11 +249,58 @@ router.post('/delThisAddress', (req, res, next) => {
 })
 
 /**
+ * 设置默认地址
+ */
+router.post('/editDefaultAddress', (req, res, next) => {
+  const userId = req.cookies.userId
+  const addressId = req.body.addressId
+  if (!addressId) {
+    res.json({
+      code: '1',
+      message: 'addressId is empty',
+      result: {}
+    })
+    return
+  }
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      let addressList = userDao.addressList
+      addressList.map(list => {
+        if (list.addressId === addressId) {
+          list.isDefault = true
+        } else {
+          list.isDefault = false
+        }
+      })
+      userDao.save((err, dao) => {
+        if (err) {
+          res.json({
+            code: '1',
+            message: err.message,
+            result: {}
+          })
+        } else {
+          res.json({
+            code: '0',
+            message: 'succ',
+            result: {}
+          })
+        }
+      })
+    }
+  })
+})
+/**
  * 预览 订单列表
  */
 router.get('/getOrderList', (req, res, next) => {
   const userId = req.cookies.userId
-  const orderId = '6224201705302250301' // req.body.orderId
   User.findOne({userId: userId}, (err, userDao) => {
     if (err) {
       res.json({
@@ -263,9 +310,9 @@ router.get('/getOrderList', (req, res, next) => {
       })
     } else {
       let orderList = []
-      userDao.orderList.map(list => {
-        if (list.orderId === orderId) {
-          orderList = list
+      userDao.cartList.map(list => {
+        if (list.checked === '1') {
+          orderList.push(list)
         }
       })
       res.json({
@@ -273,6 +320,102 @@ router.get('/getOrderList', (req, res, next) => {
         message: 'succ',
         result: {
           orderList: orderList
+        }
+      })
+    }
+  })
+})
+
+/**
+ * 创建订单
+ */
+router.post('/payment', (req, res, next) => {
+  const userId = req.cookies.userId
+  const {addressId, totalPrice} = req.body
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      // 获取地址信息
+      let orderInfo = {
+        addressInfo: {},
+        goodsList: [],
+        orderTotal: '',
+        orderStatus: '',
+        orderId: '',
+        createTime: ''
+      }
+      userDao.addressList.map(list => {
+        if (list.addressId === addressId) {
+          orderInfo.addressInfo = list
+        }
+      })
+      orderInfo.orderTotal = totalPrice
+      orderInfo.orderStatus = '1'
+      // 获取订单信息
+      userDao.cartList.map(list => {
+        if (list.checked === '1') {
+          orderInfo.goodsList.push(list)
+        }
+      })
+      // 创建订单ID 创建时间
+      const random1 = Math.floor(Math.random() * 10)
+      const random2 = Math.floor(Math.random() * 10)
+      const nowDate = new Date() // .format('YY-MM-DD HH:MM:SS')
+      orderInfo.orderId = 'XYZ' + random1 + nowDate + random2
+      orderInfo.createTime = nowDate
+      userDao.orderList.push(orderInfo)
+      userDao.save((err2, doc) => {
+        if (err2) {
+          res.json({
+            code: '1',
+            message: err.message,
+            result: {}
+          })
+        } else {
+          res.json({
+            code: '0',
+            message: 'succ',
+            result: {
+              orderId: orderInfo.orderId,
+              orderTotal: orderInfo.orderTotal
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
+/**
+ * 获取订单详情
+ */
+router.get('/getOrderdetail', (req, res, next) => {
+  const userId = req.cookies.userId
+  const orderId = req.query.orderId
+  User.findOne({userId: userId}, (err, userDao) => {
+    if (err) {
+      res.json({
+        code: '1',
+        message: err.message,
+        result: {}
+      })
+    } else {
+      let orderInfo = {}
+      userDao.orderList.map(list => {
+        if (list.orderId === orderId) {
+          orderInfo = list
+        }
+      })
+      res.json({
+        code: '0',
+        message: 'succ',
+        result: {
+          orderInfo: orderInfo
         }
       })
     }
