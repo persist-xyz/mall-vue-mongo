@@ -98,11 +98,10 @@ export default {
     //      console.log(`${scrollTop}` + `${clientHeight}`, `${scrollHeight}`, `${offsetHeight}`, `${innerHeight}`)
     },
     addCart (productId) {
-      console.log(productId)
       this.$ajax.post('/goods/addCart', {
         productId: productId
       }).then(res => {
-        //
+        this.$store.commit('UPDATE_CART_COUNT', 1)
       })
     },
     getGoodList () {

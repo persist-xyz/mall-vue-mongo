@@ -4,6 +4,7 @@ import Vue from 'vue'
 import vueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
+import store from './store'
 import axios from '@/utils/axios'
 import '@/assets/css/reset.scss'
 import '@/assets/css/common.scss'
@@ -21,6 +22,7 @@ Vue.prototype.$ajax = axios
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'

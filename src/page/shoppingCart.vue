@@ -18,9 +18,9 @@
           </div>
           <span class="price black2">{{list.salePrice}}</span>
           <div class="edit">
-            <span @click="list.productNum--, updateCart(list)">-</span>
-            <input type="text" v-model="list.productNum" @change="updateCart(list)" />
-            <span @click="list.productNum++, updateCart(list)">+</span>
+            <span @click="updateCart(list, 'cut')">-</span>
+            <input type="text" v-model="list.productNum" @change="updateCart(list, 'input')" />
+            <span @click="updateCart(list, 'add')">+</span>
           </div>
           <span class="total-price orange">{{list.salePrice * list.productNum}}</span>
           <span class="del" @click="delCart(list)">del</span>
@@ -96,6 +96,7 @@ export default {
     delCart (list) {
       this.$ajax.post('/users/delCart', {productId: list.productId}).then(res => {
         if (res.code === '0') {
+          this.$store.commit('UPDATE_CART_COUNT', -Number(list.productNum))
           this.getCartList()
         } else {
           alert(res.message)
@@ -107,12 +108,29 @@ export default {
         name: 'addressList'
       })
     },
-    updateCart (list) {
+    updateCart (list, type) {
+      let productNum = 0
+      if (type === 'add') {
+        list.productNum++
+        productNum = 1
+      } else if (type === 'cut') {
+        list.productNum--
+        productNum = -1
+      } else if (type === 'input') {
+        let preTotal = 0
+        this.cartList.map(item => {
+          if (list.productId !== item.productId) {
+            preTotal += Number(item.productNum)
+          }
+        })
+        productNum = (preTotal + Number(list.productNum)) -  Number(this.$store.state.cartCount)
+      }
       this.$ajax.post('/users/updateCart', {
         productId: list.productId,
         productNum: list.productNum,
         checked: list.checked
       }).then(res => {
+        this.$store.commit('UPDATE_CART_COUNT', productNum)
         if (res.code !== '0') {
           alert(res.message)
         }

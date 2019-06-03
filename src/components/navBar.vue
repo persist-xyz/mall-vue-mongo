@@ -12,7 +12,7 @@
             v-if="!hasLogin">登陆/注册</span>
 
       <div v-else @mouseenter="showMenu = true">
-        <span class="name">{{userName}}</span>
+        <span class="name">{{nickName}}</span>
         <i class="iconfont icon-icon-test1"></i>
       </div>
 
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
 export default {
   name: 'NavBar',
   props: {
@@ -47,13 +48,15 @@ export default {
       showMenu: false,
       showLogin: false,
       hasLogin: false,
-      cartCount: 0,
       userName: '',
       userPwd: ''
     }
   },
   mounted () {
     this.getLoginStatus()
+  },
+  computed: {
+    ...mapState(['cartCount', 'nickName'])
   },
   methods: {
     toLogin () {
@@ -63,10 +66,11 @@ export default {
       }).then(res => {
         if (res.code === '0') {
           this.hasLogin = true
-          this.userName = res.result.userName
           this.userPwd = res.result.userPwd
           this.cartCount = res.result.cartCount
           this.showLogin = false
+          this.$store.commit('UPDATE_NICK_NAME', this.userName)
+          this.getCartCount()
         } else {
           alert(res.msg)
         }
@@ -75,9 +79,9 @@ export default {
     loginOut () {
       this.$ajax.post('/users/loginOut').then(res => {
         if (res.code === '0') {
-          this.userName = ''
-          this.userPwd = ''
-          this.cartCount = 0
+          this.$store.commit('UPDATE_NICK_NAME', '')
+          this.$store.commit('UPDATE_CART_COUNT', 0)
+          console.log(this.cartCount)
           this.hasLogin = false
         }
         this.showMenu = false
@@ -87,8 +91,16 @@ export default {
       this.$ajax.get('/users/checkLogin').then(res => {
         if (res.code === '0') {
           this.userName = res.result.userName
-          this.cartCount = 0
+          this.$store.commit('UPDATE_NICK_NAME', res.result.userName)
           this.hasLogin = true
+          this.getCartCount()
+        }
+      })
+    },
+    getCartCount () {
+      this.$ajax.get('/users/getCartCount').then(res => {
+        if (res.code === '0') {
+          this.$store.commit('UPDATE_CART_COUNT', res.result.cartCount)
         }
       })
     },

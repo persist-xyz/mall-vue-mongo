@@ -9,7 +9,6 @@ let User = require('../modules/users')
  */
 router.post('/login', (req, res, next) => {
   let {userName, userPwd} = req.body
-  console.log('Cookies: ', req.cookies)
   User.findOne({userName: userName}, (err, userDao) => {
     if (err) {
       res.json({
@@ -39,9 +38,7 @@ router.post('/login', (req, res, next) => {
             code: '0',
             msg: 'login succ',
             result: {
-              userName: userDao.userName,
-              userPwd: userDao.userPwd,
-              cartCount: userDao.cartList.length
+              userName: userDao.userName
             }
           })
         }
@@ -91,6 +88,41 @@ router.post('/loginOut', (req, res, next) => {
     msg: 'succ',
     result: {}
   })
+})
+
+/**
+ * 获取购物车数量
+ */
+router.get('/getCartCount', (req, res, next) => {
+  if (!req.cookies.userId) {
+    res.json({
+      code: '1',
+      msg: 'no login',
+      result: {}
+    })
+  } else {
+    User.findOne({userId: req.cookies.userId}, (err, userDao) => {
+      if (err) {
+        res.json({
+          code: '1',
+          msg: err.message,
+          result: {}
+        })
+      } else {
+        let cartCount = 0
+        userDao.cartList.map(list => {
+          cartCount += parseInt(list.productNum)
+        })
+        res.json({
+          code: '0',
+          msg: 'succ',
+          result: {
+            cartCount: cartCount
+          }
+        })
+      }
+    })
+  }
 })
 
 /**

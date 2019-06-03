@@ -1,0 +1,3 @@
+//
+export const UPDATE_NICK_NAME = 'UPDATE_NICK_NAME'
+export const UPDATE_CART_COUNT = 'UPDATE_CART_COUNT'
