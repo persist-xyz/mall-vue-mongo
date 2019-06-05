@@ -79,6 +79,8 @@ export default {
           this.orderList = res.result.orderList
           this.orderList.map(list => this.preTotalPrice += list.salePrice * list.productNum )
           this.totalPrice = this.preTotalPrice + this.shipping - this.discount
+        } else {
+          this.$toast(res.msg)
         }
       })
     },
@@ -95,6 +97,8 @@ export default {
               orderId: res.result.orderId
             }
           })
+        } else {
+          this.$toast(res.msg)
         }
       })
     }

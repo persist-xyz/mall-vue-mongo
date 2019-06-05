@@ -43,33 +43,27 @@ router.post('/login', (req, res, next) => {
           })
         }
       } else {
-        console.log('reg---')
-        res.json({
-          code: '1',
-          msg: 'no this user'
+        User.create({
+          userName: userName,
+          userPwd: userPwd,
+          userId: ''
+        }, (err2, doc) => {
+          if (err2) {
+            res.json({
+              code: '1',
+              result: {
+                msg: err2.message
+              }
+            })
+          } else {
+            res.json({
+              code: '0',
+              result: {
+                msg: 'register succ'
+              }
+            })
+          }
         })
-        // TODO 注册
-        // let _userDao = {
-        //   userName,
-        //   userPwd
-        // }
-        // _userDao.save((err2, doc) => {
-        //   if (err2) {
-        //     res.json({
-        //       code: '1',
-        //       result: {
-        //         msg: err2.message
-        //       }
-        //     })
-        //   } else {
-        //     res.json({
-        //       code: '0',
-        //       result: {
-        //         msg: 'register succ'
-        //       }
-        //     })
-        //   }
-        // })
       }
     }
   })
@@ -110,7 +104,7 @@ router.get('/getCartCount', (req, res, next) => {
         })
       } else {
         let cartCount = 0
-        userDao.cartList.map(list => {
+        userDao.cartList && userDao.cartList.length && userDao.cartList.map(list => {
           cartCount += parseInt(list.productNum)
         })
         res.json({
@@ -161,11 +155,12 @@ router.get('/cartList', (req, res, next) => {
         result: {}
       })
     } else {
+      console.log(userDao)
       res.json({
         code: '0',
         msg: 'succ',
         result: {
-          cartList: userDao.cartList
+          cartList: userDao.cartList || []
         }
       })
     }
@@ -188,13 +183,13 @@ router.post('/delCart', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
       res.json({
         code: '0',
-        message: 'succ',
+        msg: 'succ',
         result: {}
       })
     }
@@ -215,13 +210,13 @@ router.post('/updateCart', (req, res, next) => {
       if (err) {
         res.json({
           code: '1',
-          message: err.message,
+          msg: err.message,
           result: {}
         })
       } else {
         res.json({
           code: '0',
-          message: 'succ',
+          msg: 'succ',
           result: {}
         })
       }
@@ -236,13 +231,13 @@ router.get('/getAddressList', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
       res.json({
         code: '0',
-        message: 'succ',
+        msg: 'succ',
         result: {
           addressList: userDao.addressList
         }
@@ -267,13 +262,13 @@ router.post('/delThisAddress', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
       res.json({
         code: '0',
-        message: 'succ',
+        msg: 'succ',
         result: {}
       })
     }
@@ -289,7 +284,7 @@ router.post('/editDefaultAddress', (req, res, next) => {
   if (!addressId) {
     res.json({
       code: '1',
-      message: 'addressId is empty',
+      msg: 'addressId is empty',
       result: {}
     })
     return
@@ -298,7 +293,7 @@ router.post('/editDefaultAddress', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
@@ -314,13 +309,13 @@ router.post('/editDefaultAddress', (req, res, next) => {
         if (err) {
           res.json({
             code: '1',
-            message: err.message,
+            msg: err.message,
             result: {}
           })
         } else {
           res.json({
             code: '0',
-            message: 'succ',
+            msg: 'succ',
             result: {}
           })
         }
@@ -337,7 +332,7 @@ router.get('/getOrderList', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
@@ -349,7 +344,7 @@ router.get('/getOrderList', (req, res, next) => {
       })
       res.json({
         code: '0',
-        message: 'succ',
+        msg: 'succ',
         result: {
           orderList: orderList
         }
@@ -368,7 +363,7 @@ router.post('/payment', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
@@ -405,13 +400,13 @@ router.post('/payment', (req, res, next) => {
         if (err2) {
           res.json({
             code: '1',
-            message: err.message,
+            msg: err.message,
             result: {}
           })
         } else {
           res.json({
             code: '0',
-            message: 'succ',
+            msg: 'succ',
             result: {
               orderId: orderInfo.orderId,
               orderTotal: orderInfo.orderTotal
@@ -433,7 +428,7 @@ router.get('/getOrderdetail', (req, res, next) => {
     if (err) {
       res.json({
         code: '1',
-        message: err.message,
+        msg: err.message,
         result: {}
       })
     } else {
@@ -445,7 +440,7 @@ router.get('/getOrderdetail', (req, res, next) => {
       })
       res.json({
         code: '0',
-        message: 'succ',
+        msg: 'succ',
         result: {
           orderInfo: orderInfo
         }

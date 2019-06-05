@@ -1,6 +1,6 @@
 <template>
   <div class="nav">
-    <div class="logo"></div>
+    <router-link class="logo" to="goodList"></router-link>
     <div class="user" @mouseleave="showMenu = false">
       <div class="cart" @click="toMyCart">
         <i class="iconfont icon-icon-test"></i>
@@ -17,7 +17,7 @@
       </div>
 
       <div class="login-status" v-show="showMenu" @mouseleave="showMenu = false">
-        <span>我的地址</span>
+        <!--<span>我的地址</span>-->
         <span class="login-opt" @click="loginOut">退出</span>
       </div>
     </div>
@@ -72,7 +72,7 @@ export default {
           this.$store.commit('UPDATE_NICK_NAME', this.userName)
           this.getCartCount()
         } else {
-          alert(res.msg)
+          this.$toast(res.msg)
         }
       })
     },

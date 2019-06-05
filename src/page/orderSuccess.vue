@@ -48,6 +48,8 @@ export default {
       this.$ajax.get('/users/getOrderdetail', {orderId: this.$route.query.orderId}).then(res => {
         if (res.code === '0') {
           this.orderInfo = res.result.orderInfo
+        } else {
+          this.$toast(res.msg)
         }
       })
     }

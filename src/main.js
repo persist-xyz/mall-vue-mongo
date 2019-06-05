@@ -9,6 +9,8 @@ import axios from '@/utils/axios'
 import '@/assets/css/reset.scss'
 import '@/assets/css/common.scss'
 
+import toast from '@/components/toast'
+
 import infiniteScroll from 'vue-infinite-scroll'
 Vue.use(infiniteScroll)
 
@@ -18,6 +20,7 @@ Vue.use(vueLazyload, {
 Vue.config.productionTip = false
 
 Vue.prototype.$ajax = axios
+Vue.prototype.$toast = toast
 
 /* eslint-disable no-new */
 new Vue({

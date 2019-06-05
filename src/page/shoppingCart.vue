@@ -23,7 +23,7 @@
             <span @click="updateCart(list, 'add')">+</span>
           </div>
           <span class="total-price orange">{{list.salePrice * list.productNum}}</span>
-          <span class="del" @click="delCart(list)">del</span>
+          <span class="del" @click="delCart(list)"><i class="iconfont icon-shanchu"></i></span>
         </li>
       </ul>
     </div>
@@ -83,14 +83,18 @@ export default {
     },
     getCartList () {
       this.$ajax.get('/users/cartList').then(res => {
-        this.cartList = res.result.cartList
-        let _checkedLength = 0
-        this.cartList.map(list => {
-          if (list.checked === '1') {
-            _checkedLength += 1
-          }
-        })
-        this.checkAll = this.cartList.length === _checkedLength
+        if (res.code === '0') {
+          this.cartList = res.result.cartList
+          let _checkedLength = 0
+          this.cartList.map(list => {
+            if (list.checked === '1') {
+              _checkedLength += 1
+            }
+          })
+          this.checkAll = this.cartList.length === _checkedLength
+        } else {
+          this.$toast(res.msg)
+        }
       })
     },
     delCart (list) {
@@ -99,7 +103,7 @@ export default {
           this.$store.commit('UPDATE_CART_COUNT', -Number(list.productNum))
           this.getCartList()
         } else {
-          alert(res.message)
+          this.$toast(res.msg)
         }
       })
     },
@@ -132,7 +136,7 @@ export default {
       }).then(res => {
         this.$store.commit('UPDATE_CART_COUNT', productNum)
         if (res.code !== '0') {
-          alert(res.message)
+          this.$toast(res.msg)
         }
       })
     }
@@ -216,6 +220,9 @@ export default {
       .del{
         width:210px;
         cursor: pointer;
+        .icon-shanchu{
+          font-size:20px;
+        }
       }
     }
   }

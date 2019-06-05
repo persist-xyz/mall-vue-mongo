@@ -58,6 +58,8 @@
         this.$ajax.get('/users/getAddressList').then(res => {
           if (res.code === '0') {
             this.addressList = res.result.addressList
+          } else {
+            this.$toast(res.msg)
           }
         })
       },
@@ -67,7 +69,7 @@
         list.isDefault = true
         this.$ajax.post('/users/editDefaultAddress', {addressId: this.addressId}).then(res => {
           if (res.code !== '0') {
-            alert(res.message)
+            this.$toast(res.msg)
           }
         })
       },
@@ -75,6 +77,8 @@
         this.$ajax.post('/users/delThisAddress', {addressId: list.addressId}).then(res => {
           if (res.code === '0') {
             this.getAddressList()
+          } else {
+            this.$toast(res.msg)
           }
         })
       },

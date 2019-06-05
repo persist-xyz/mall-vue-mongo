@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+// 登陆拦截
 app.use((req, res, next) => {
   if (req.cookies.userId) {
     next()
@@ -38,11 +39,6 @@ app.use((req, res, next) => {
 app.use('/', goods)
 app.use('/goods', goods)
 app.use('/users', users)
-
-app.get('/test', function (req, res) {
-  console.log('start11--')
-  res.send('Hello World!')
-})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

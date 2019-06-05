@@ -3,6 +3,7 @@ let router = express.Router()
 let mongoose = require('mongoose')
 
 let Goods = require('../modules/goods')
+let User = require('../modules/users')
 
 mongoose.connect('mongodb://localhost:27017/mall', {useNewUrlParser: true})
 
@@ -92,9 +93,7 @@ router.get('/list', (req, res, next) => {
  */
 router.post('/addCart', (req, res, next) => {
   const {productId} = req.body
-  let User = require('../modules/users')
-  // 1、查找该用户 userId: userId
-  let userId = '100000077'
+  let userId = req.cookies.userId
   User.findOne({userId: userId}, (err, userDao) => {
     if (err) {
       res.json({

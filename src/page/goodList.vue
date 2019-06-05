@@ -113,7 +113,7 @@ export default {
           this.busy = res.result.count < this.params.pageNum ? 1 : 0
         } else {
           this.busy = true
-          alert(res.msg)
+          this.$toast(res.msg)
         }
       })
     },
