@@ -1,0 +1,108 @@
+.
+├── README.md
+├── build
+│   ├── build.js
+│   ├── check-versions.js
+│   ├── logo.png
+│   ├── utils.js
+│   ├── vue-loader.conf.js
+│   ├── webpack.base.conf.js
+│   ├── webpack.dev.conf.js
+│   └── webpack.prod.conf.js
+├── config
+│   ├── dev.env.js
+│   ├── index.js
+│   └── prod.env.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── server
+│   ├── app.js
+│   ├── bin
+│   │   └── www
+│   ├── modules
+│   │   ├── goods.js
+│   │   └── users.js
+│   ├── package.json
+│   ├── public
+│   │   ├── images
+│   │   │   └── logo.jpg
+│   │   └── stylesheets
+│   │       └── style.css
+│   ├── routes
+│   │   ├── goods.js
+│   │   └── users.js
+│   └── views
+│       └── index.html
+├── src
+│   ├── App.vue
+│   ├── assets
+│   │   ├── css
+│   │   │   ├── common.scss
+│   │   │   └── reset.scss
+│   │   ├── iconfont
+│   │   │   ├── iconfont.css
+│   │   │   ├── iconfont.eot
+│   │   │   ├── iconfont.js
+│   │   │   ├── iconfont.svg
+│   │   │   ├── iconfont.ttf
+│   │   │   ├── iconfont.woff
+│   │   │   └── iconfont.woff2
+│   │   └── image
+│   │       └── logo.jpg
+│   ├── components
+│   │   ├── breadCrumb.vue
+│   │   ├── dialog
+│   │   │   ├── index.js
+│   │   │   └── toast.vue
+│   │   ├── goodCard.vue
+│   │   ├── navBar.vue
+│   │   └── toast
+│   │       ├── index.js
+│   │       └── toast.vue
+│   ├── main.js
+│   ├── page
+│   │   ├── addressList.vue
+│   │   ├── goodList.vue
+│   │   ├── orderSuccess.vue
+│   │   ├── shoppingCart.vue
+│   │   └── viewOrder.vue
+│   ├── router
+│   │   └── index.js
+│   ├── store
+│   │   ├── action.js
+│   │   ├── getters.js
+│   │   ├── index.js
+│   │   ├── mutation-types.js
+│   │   ├── mutations.js
+│   │   └── state.js
+│   └── utils
+│       └── axios.js
+├── static
+│   ├── image
+│   │   ├── 1.jpg
+│   │   ├── 10.jpg
+│   │   ├── 11.jpg
+│   │   ├── 12.jpg
+│   │   ├── 13.jpg
+│   │   ├── 14.jpg
+│   │   ├── 15.jpg
+│   │   ├── 16.jpg
+│   │   ├── 17.jpg
+│   │   ├── 18.jpg
+│   │   ├── 19.jpg
+│   │   ├── 2.jpg
+│   │   ├── 20.jpg
+│   │   ├── 3.jpg
+│   │   ├── 4.jpg
+│   │   ├── 5.jpg
+│   │   ├── 6.jpg
+│   │   ├── 7.jpg
+│   │   ├── 8.jpg
+│   │   ├── 9.jpg
+│   │   └── logo.jpg
+│   └── loading
+│       └── loading-bars.svg
+└── tree.text
+
+25 directories, 90 files
