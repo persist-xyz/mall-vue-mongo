@@ -81,15 +81,15 @@ npm run build --report
 
 ### 页面部分截图
 
-![image-20190606221715807](/Users/xyz_persist/Library/Application Support/typora-user-images/image-20190606221715807.png)
+![1](./src/assets/image/1.png)
 
 
 
-![image-20190606221747018](/Users/xyz_persist/Library/Application Support/typora-user-images/image-20190606221747018.png)
+![2](./src/assets/image/2.png)
 
 
 
-![image-20190606221802135](/Users/xyz_persist/Library/Application Support/typora-user-images/image-20190606221802135.png)
+![3](./src/assets/image/3.png)
 
 
 
